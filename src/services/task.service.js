@@ -1,39 +1,19 @@
-const API_URL = "http://127.0.0.1:8000/api/tasks";
+import { API_BASE_URL } from "./index";
 
-export const tareaService = {
+const TASK_URL = `${API_BASE_URL}tasks`;
 
-    getAll: async () => {
-        try {
-            const response = await fetch(API_URL, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                }
-            });
+export const getAllTasks = async () => {
+    try {
+        const response = await fetch(TASK_URL);
 
-            if (!response.ok) {
-                throw new Error("Error fetching tasks");
-            }
-
-            return await response.json();
-
-        } catch (error) {
-            console.error("Error in getAll:", error);
-            throw error;
+        if (!response.ok) {
+            throw new Error("Error fetching tasks");
         }
-    },
 
-    create: async (data) => {
-        // implementación pendiente
-    },
-
-    update: async (id, data) => {
-        // implementación pendiente
-    },
-
-    delete: async (id) => {
-        // implementación pendiente
+        return await response.json();
+    } catch (error) {
+        console.error("Error in getAllTasks:", error);
+        throw error;
     }
-
 };
+
