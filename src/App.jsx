@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Categories from "./pages/Categories";
 import Tags from "./pages/Tags";
+import Tasks from "./pages/Tasks";
 
 function App() {
 
@@ -51,6 +52,7 @@ function App() {
           <Route path="/" element={<Categories />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/tags" element={<Tags />} />
+          <Route path="/tasks" element={<Tasks />} />
         </Routes>
       </div>
 

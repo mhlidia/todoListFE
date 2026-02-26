@@ -19,6 +19,11 @@ function Navbar() {
               Etiquetas
             </Link>
           </li>
+          <li className="nav-item">
+            <Link className="nav-link" to="/tasks">
+              Tareas
+            </Link>
+          </li>
         </ul>
       </div>
     </nav>
