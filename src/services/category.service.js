@@ -21,3 +21,26 @@ export const createCategory = async (data) => {
   if (!response.ok) throw new Error("Error creating categories");
   return await response.json();
 };
+
+export const updateCategory = async (id, data) => {
+    try {
+        const response = await fetch(`${CATEGORY_URL}/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+            throw new Error("Error updating category");
+        }
+
+        return await response.json();
+
+    } catch (error) {
+        console.error("Error in updateCategory:", error);
+        throw error;
+    }
+};

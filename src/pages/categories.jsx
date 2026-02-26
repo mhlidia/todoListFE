@@ -4,6 +4,7 @@ import * as categoryService from "../services/category.service";
 function Categories() {
   const [categories, setCategories] = useState([]);
   const [name, setName] = useState("");
+  const [editingId, setEditingId] = useState(null);
 
   useEffect(() => {
     loadCategories();
@@ -18,9 +19,20 @@ function Categories() {
     e.preventDefault();
     if (!name) return;
 
-    await categoryService.createCategory({ name });
+    if (editingId) {
+      await categoryService.updateCategory(editingId, { name });
+      setEditingId(null);
+    } else {
+      await categoryService.createCategory({ name });
+    }
+
     setName("");
     loadCategories();
+  };
+
+  const handleEdit = (category) => {
+    setName(category.name);
+    setEditingId(category.id);
   };
 
   return (
@@ -37,7 +49,9 @@ function Categories() {
             onChange={(e) => setName(e.target.value)}
           />
         </div>
-        <button className="btn btn-primary">Crear</button>
+        <button className="btn btn-primary">
+          {editingId ? "Actualizar" : "Crear"}
+        </button>
       </form>
 
       <table className="table table-bordered w-100">
@@ -45,6 +59,7 @@ function Categories() {
           <tr>
             <th>ID</th>
             <th>Nombre</th>
+            <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -52,6 +67,14 @@ function Categories() {
             <tr key={cat.id}>
               <td>{cat.id}</td>
               <td>{cat.name}</td>
+              <td>
+                <button
+                  className="btn btn-warning btn-sm"
+                  onClick={() => handleEdit(cat)}
+                >
+                  Editar
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
