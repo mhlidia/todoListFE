@@ -12,6 +12,7 @@ function Tasks() {
   const [description, setDescription] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
+  const [editingTaskId, setEditingTaskId] = useState(null);
 
   useEffect(() => {
     loadData();
@@ -32,7 +33,7 @@ function Tasks() {
     setSelectedTags(values);
     };
 
-  const handleSubmit = async (e) => {
+  /*const handleSubmit = async (e) => {
     e.preventDefault();
 
     await taskService.createTask({
@@ -46,6 +47,55 @@ function Tasks() {
     setDescription("");
     setCategoryId("");
     setSelectedTags([]);
+
+    loadData();
+  };*/
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const data = {
+      title,
+      description,
+      category_id: Number(categoryId),
+      tags: selectedTags
+    };
+
+    if (editingTaskId) {
+      await taskService.updateTask(editingTaskId, data);
+    } else {
+      await taskService.createTask(data);
+    }
+
+    resetForm();
+    loadData();
+  };
+
+  const resetForm = () => {
+    setEditingTaskId(null);
+    setTitle("");
+    setDescription("");
+    setCategoryId("");
+    setSelectedTags([]);
+  };
+
+  const handleEdit = (task) => {
+    setEditingTaskId(task.id);
+    setTitle(task.title);
+    setDescription(task.description || "");
+    setCategoryId(task.category_id);
+
+    const tagIds = task.tags.map(tag => tag.id);
+    setSelectedTags(tagIds);
+  };
+
+  const toggleStatus = async (task) => {
+    await taskService.updateTask(task.id, {
+      title: task.title,
+      description: task.description,
+      category_id: task.category_id,
+      status: !task.status,
+      tags: task.tags.map(tag => tag.id)
+    });
 
     loadData();
   };
@@ -108,24 +158,39 @@ function Tasks() {
         </div>
 
         <button className="btn btn-primary">
-          Crear tarea
+          {editingTaskId ? "Actualizar tarea" : "Crear tarea"}
         </button>
       </form>
 
       <table className="table table-bordered">
         <thead>
             <tr>
+                <th>Estado</th>
                 <th>ID</th>
                 <th>Título</th>
                 <th>Categoría</th>
                 <th>Etiquetas</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
             {tasks.map((task) => (
                 <tr key={task.id}>
+                  <td>
+                    {task.status ? (
+                      <span className="badge bg-success">Completada</span>
+                    ) : (
+                      <span className="badge bg-warning text-dark">Pendiente</span>
+                    )}
+                    <button
+                      className="btn btn-sm btn-success me-2"
+                      onClick={() => toggleStatus(task)}
+                    >
+                      {task.status ? "Desmarcar" : "Completar"}
+                    </button>
+                  </td>
                 <td>{task.id}</td>
-                <td>{task.title}</td>
+                <td style={{ textDecoration: task.status ? "line-through" : "none" }}>{task.title}</td>
                 <td>{task.category?.name}</td>
 
                 <td>
@@ -149,6 +214,16 @@ function Tasks() {
                         ))
                     : "Sin etiquetas"}
                 </td>
+                <td>
+                  <button
+                    className="btn btn-sm btn-warning me-2"
+                    onClick={() => handleEdit(task)}
+                  >
+                    Editar
+                  </button>
+                  
+                </td>
+                
 
                 </tr>
             ))}
