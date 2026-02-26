@@ -6,6 +6,7 @@ function Categories() {
   const [name, setName] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
+  const [viewCategory, setViewCategory] = useState(null);
 
   useEffect(() => {
     loadCategories();
@@ -44,6 +45,11 @@ function Categories() {
     loadCategories();
   };
 
+  const handleView = async (id) => {
+    const data = await categoryService.getOneCategory(id);
+    setViewCategory(data);
+  };
+
   return (
     <div>
       <h2>Categorías</h2>
@@ -78,6 +84,12 @@ function Categories() {
               <td>{cat.name}</td>
               <td>
                 <button
+                  className="btn btn-info btn-sm me-2"
+                  onClick={() => handleView(cat.id)}
+                >
+                  Ver
+                </button>
+                <button
                   className="btn btn-warning btn-sm"
                   onClick={() => handleEdit(cat)}
                 >
@@ -94,6 +106,35 @@ function Categories() {
           ))}
         </tbody>
       </table>
+      
+      {viewCategory && (
+        <div className="modal fade show d-block" tabIndex="-1">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Detalle de Categoría</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setViewCategory(null)}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <p><strong>ID:</strong> {viewCategory.id}</p>
+                <p><strong>Nombre:</strong> {viewCategory.name}</p>
+              </div>
+              <div className="modal-footer">
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setViewCategory(null)}
+                >
+                  Cerrar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {deleteId && (
         <div className="modal fade show d-block" tabIndex="-1">
