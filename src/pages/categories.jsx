@@ -5,6 +5,7 @@ function Categories() {
   const [categories, setCategories] = useState([]);
   const [name, setName] = useState("");
   const [editingId, setEditingId] = useState(null);
+  const [deleteId, setDeleteId] = useState(null);
 
   useEffect(() => {
     loadCategories();
@@ -33,6 +34,14 @@ function Categories() {
   const handleEdit = (category) => {
     setName(category.name);
     setEditingId(category.id);
+  };
+
+  const handleDelete = async () => {
+    if (!deleteId) return;
+
+    await categoryService.deleteCategory(deleteId);
+    setDeleteId(null);
+    loadCategories();
   };
 
   return (
@@ -74,11 +83,51 @@ function Categories() {
                 >
                   Editar
                 </button>
+                <button
+                  className="btn btn-danger btn-sm ms-2"
+                  onClick={() => setDeleteId(cat.id)}
+                >
+                  Eliminar
+                </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {deleteId && (
+        <div className="modal fade show d-block" tabIndex="-1">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Confirmar eliminación</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setDeleteId(null)}
+                ></button>
+              </div>
+              <div className="modal-body">
+                <p>¿Estás segura que deseas eliminar esta categoría?</p>
+              </div>
+              <div className="modal-footer">
+                <button
+                  className="btn btn-secondary"
+                  onClick={() => setDeleteId(null)}
+                >
+                  Cancelar
+                </button>
+                <button
+                  className="btn btn-danger"
+                  onClick={handleDelete}
+                >
+                  Eliminar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
