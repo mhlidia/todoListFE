@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 import { getAllCategories, createCategory } from "./services/category.service";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import Categories from "./pages/Categories";
+import Tags from "./pages/Tags";
 
 function App() {
 
@@ -39,30 +43,15 @@ function App() {
   };
 
   return (
-    <div className="container mt-5">
-
-      <div className="card shadow mb-4">
-        <div className="card-body">
-          <h2 className="mb-3">Create Category</h2>
-
-          <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label className="form-label">Category Name</label>
-              <input
-                type="text"
-                className="form-control"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-              {error && <small className="text-danger">{error}</small>}
-            </div>
-
-            <button type="submit" className="btn btn-primary">
-              Create
-            </button>
-          </form>
-
-        </div>
+    <Router>
+      <Navbar />
+      
+      <div className="container-fluid">
+        <Routes>
+          <Route path="/" element={<Categories />} />
+          <Route path="/categories" element={<Categories />} />
+          <Route path="/tags" element={<Tags />} />
+        </Routes>
       </div>
 
       <div className="card shadow">
@@ -89,7 +78,7 @@ function App() {
         </div>
       </div>
 
-    </div>
+    </Router>
   );
 }
 
