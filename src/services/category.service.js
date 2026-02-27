@@ -35,3 +35,15 @@ export const updateCategory = async (id, data) => {
   if (!response.ok) throw new Error("Error updating categories");
   return await response.json();
 };
+
+export const deleteCategory = async (id) => {
+    const response = await fetch(`${CATEGORY_URL}/${id}`, {
+        method: "DELETE",
+        headers: {
+            "Accept": "application/json"
+        }
+
+    });
+    if (!response.ok) throw new Error("Error deleting category");
+    return true;
+};
