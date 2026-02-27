@@ -1,53 +1,51 @@
-import { API_BASE_URL } from "./index";
-
-const TAG_URL = `${API_BASE_URL}tags`;
+import { apiFetch } from "./api";
 
 export const getAllTags = async () => {
-  const response = await fetch(TAG_URL);
+  const response = await apiFetch("tags");
   if (!response.ok) throw new Error("Error fetching tags");
   return await response.json();
 };
 
 export const getOneTag = async (id) => {
-  const response = await fetch(`${TAG_URL}/${id}`);
+  const response = await apiFetch(`tags/${id}`);
   if (!response.ok) throw new Error("Error fetching tag");
   return await response.json();
 };
 
 export const createTag = async (data) => {
-  const response = await fetch(TAG_URL, {
+  const response = await apiFetch("tags", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json"
-    },
     body: JSON.stringify(data)
   });
 
-  if (!response.ok) throw new Error("Error creating tag");
+  if (!response.ok) {
+    throw new Error("Error creating tag");
+  }
+
   return await response.json();
 };
 
 export const updateTag = async (id, data) => {
-  const response = await fetch(`${TAG_URL}/${id}`, {
+  const response = await apiFetch(`tags/${id}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json"
-    },
     body: JSON.stringify(data)
   });
 
-  if (!response.ok) throw new Error("Error updating tag");
+  if (!response.ok) {
+    throw new Error("Error updating tag");
+  }
+
   return await response.json();
 };
 
 export const deleteTag = async (id) => {
-  const response = await fetch(`${TAG_URL}/${id}`, {
-    method: "DELETE",
-    headers: { "Accept": "application/json" }
+  const response = await apiFetch(`tags/${id}`, {
+    method: "DELETE"
   });
 
-  if (!response.ok) throw new Error("Error deleting tag");
+  if (!response.ok) {
+    throw new Error("Error deleting tag");
+  }
+
   return true;
 };

@@ -1,20 +1,14 @@
-import { API_BASE_URL } from "./index";
-
-const TASK_URL = `${API_BASE_URL}tasks`;
+import { apiFetch } from "./api";
 
 export const getAllTasks = async () => {
-  const response = await fetch(TASK_URL);
+  const response = await apiFetch("tasks");
   if (!response.ok) throw new Error("Error fetching tasks");
   return await response.json();
 };
 
 export const createTask = async (data) => {
-  const response = await fetch(TASK_URL, {
+  const response = await apiFetch("tasks", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json"
-    },
     body: JSON.stringify(data)
   });
 
@@ -23,12 +17,8 @@ export const createTask = async (data) => {
 };
 
 export const updateTask = async (id, data) => {
-  const response = await fetch(`${TASK_URL}/${id}`, {
+  const response = await apiFetch(`tasks/${id}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json"
-    },
     body: JSON.stringify(data)
   });
 
@@ -37,7 +27,7 @@ export const updateTask = async (id, data) => {
 };
 
 export const deleteTask = async (id) => {
-  const response = await fetch(`${TASK_URL}/${id}`, {
+  const response = await apiFetch(`tasks/${id}`, {
     method: "DELETE"
   });
 
