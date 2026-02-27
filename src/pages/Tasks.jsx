@@ -13,6 +13,7 @@ function Tasks() {
   const [categoryId, setCategoryId] = useState("");
   const [selectedTags, setSelectedTags] = useState([]);
   const [editingTaskId, setEditingTaskId] = useState(null);
+  const [selectedTask, setSelectedTask] = useState(null);
 
   useEffect(() => {
     loadData();
@@ -199,6 +200,12 @@ function Tasks() {
                 </td>
                 <td>
                   <button
+                    className="btn btn-sm btn-info me-2"
+                    onClick={() => setSelectedTask(task)}
+                  >
+                    Ver
+                  </button>
+                  <button
                     className="btn btn-sm btn-warning me-2"
                     onClick={() => handleEdit(task)}
                   >
@@ -212,6 +219,58 @@ function Tasks() {
             ))}
         </tbody>
       </table>
+
+      {selectedTask && (
+        <div className="modal show d-block" tabIndex="-1">
+          <div className="modal-dialog">
+            <div className="modal-content">
+
+              <div className="modal-header">
+                <h5 className="modal-title">{selectedTask.title}</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setSelectedTask(null)}
+                ></button>
+              </div>
+
+              <div className="modal-body">
+
+                <p><strong>Descripción:</strong></p>
+                <p>{selectedTask.description || "Sin descripción"}</p>
+
+                <p><strong>Categoría:</strong></p>
+                <span className="badge bg-primary">
+                  {selectedTask.category?.name}
+                </span>
+
+                <p className="mt-3"><strong>Etiquetas:</strong></p>
+                {selectedTask.tags.map(tag => (
+                  <span
+                    key={tag.id}
+                    className="badge me-2"
+                    style={{
+                      backgroundColor: tag.color,
+                      color: "#fff"
+                    }}
+                  >
+                    {tag.name}
+                  </span>
+                ))}
+
+                <p className="mt-3"><strong>Estado:</strong></p>
+                {selectedTask.status ? (
+                  <span className="badge bg-success">Completada</span>
+                ) : (
+                  <span className="badge bg-warning text-dark">Pendiente</span>
+                )}
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
