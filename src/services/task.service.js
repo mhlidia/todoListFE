@@ -35,3 +35,12 @@ export const updateTask = async (id, data) => {
   if (!response.ok) throw new Error("Error updating task");
   return await response.json();
 };
+
+export const deleteTask = async (id) => {
+  const response = await fetch(`${TASK_URL}/${id}`, {
+    method: "DELETE"
+  });
+
+  if (!response.ok) throw new Error("Error deleting task");
+  return true;
+};
