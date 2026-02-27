@@ -42,8 +42,17 @@ export const deleteCategory = async (id) => {
         headers: {
             "Accept": "application/json"
         }
-
     });
     if (!response.ok) throw new Error("Error deleting category");
     return true;
+};
+
+export const getOneCategory = async (id) => {
+  const response = await fetch(`${CATEGORY_URL}/${id}`);
+
+  if (!response.ok) {
+    throw new Error("Error fetching category");
+  }
+
+  return await response.json();
 };
