@@ -17,7 +17,7 @@ function Tasks() {
     loadData();
   }, []);
 
-  /*const loadData = async () => {
+  const loadData = async () => {
     const taskData = await taskService.getAllTasks();
     const categoryData = await categoryService.getAllCategories();
     const tagData = await tagService.getAllTags();
@@ -25,19 +25,7 @@ function Tasks() {
     setTasks(taskData);
     setCategories(categoryData);
     setTags(tagData);
-  };*/
-
-  const loadData = async () => {
-  const taskData = await taskService.getAllTasks();
-  console.log("TASK DATA:", taskData);
-
-  const categoryData = await categoryService.getAllCategories();
-  const tagData = await tagService.getAllTags();
-
-  setTasks(taskData);
-  setCategories(categoryData);
-  setTags(tagData);
-    };
+  };
 
   const handleTagChange = (e) => {
     const values = Array.from(e.target.selectedOptions, option => Number(option.value));
