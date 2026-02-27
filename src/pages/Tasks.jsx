@@ -33,23 +33,6 @@ function Tasks() {
     setSelectedTags(values);
     };
 
-  /*const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    await taskService.createTask({
-      title,
-      description,
-      category_id: categoryId,
-      tags: selectedTags
-    });
-
-    setTitle("");
-    setDescription("");
-    setCategoryId("");
-    setSelectedTags([]);
-
-    loadData();
-  };*/
   const handleSubmit = async (e) => {
     e.preventDefault();
 
