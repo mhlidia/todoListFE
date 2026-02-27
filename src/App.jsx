@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar";
 import Categories from "./pages/Categories";
 import Tags from "./pages/Tags";
 import Tasks from "./pages/Tasks";
+import Login from "./pages/Login";
 
 function App() {
 
@@ -53,6 +54,7 @@ function App() {
           <Route path="/categories" element={<Categories />} />
           <Route path="/tags" element={<Tags />} />
           <Route path="/tasks" element={<Tasks />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </div>
 
