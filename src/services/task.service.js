@@ -21,3 +21,17 @@ export const createTask = async (data) => {
   if (!response.ok) throw new Error("Error creating task");
   return await response.json();
 };
+
+export const updateTask = async (id, data) => {
+  const response = await fetch(`${TASK_URL}/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    body: JSON.stringify(data)
+  });
+
+  if (!response.ok) throw new Error("Error updating task");
+  return await response.json();
+};
