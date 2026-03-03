@@ -7,6 +7,8 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+  const [userName, setUserName] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,7 +18,12 @@ export default function Login() {
 
       localStorage.setItem("token", data.token);
 
-      navigate("/tasks");
+      setUserName(data.user.name);
+      setShowModal(true);
+
+      setTimeout(() => {
+        navigate("/tasks");
+      }, 2000);
 
     } catch (error) {
       alert("Credenciales incorrectas");
@@ -48,6 +55,27 @@ export default function Login() {
           Ingresar
         </button>
       </form>
+      {showModal && (
+        <>
+          <div className="modal show d-block" tabIndex="-1">
+            <div className="modal-dialog modal-dialog-centered">
+              <div className="modal-content text-center">
+
+                <div className="modal-body p-4">
+                  <h4 className="text-success">🎉 ¡Bienvenid@ {userName}!</h4>
+                  <p className="mt-3">
+                    Inicio de sesión exitoso.
+                  </p>
+                  <div className="spinner-border text-success mt-2"></div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div className="modal-backdrop show"></div>
+        </>
+      )}
     </div>
   );
 }
