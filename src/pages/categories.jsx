@@ -8,13 +8,17 @@ function Categories() {
   const [deleteId, setDeleteId] = useState(null);
   const [viewCategory, setViewCategory] = useState(null);
 
-  useEffect(() => {
-    loadCategories();
-  }, []);
+  const [pagination, setPagination] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const loadCategories = async () => {
-    const data = await categoryService.getAllCategories();
-    setCategories(data);
+  useEffect(() => {
+    loadCategories(currentPage);
+  }, [currentPage]);
+
+  const loadCategories = async (page) => {
+    const data = await categoryService.getAllCategories(page);
+    setCategories(data.data);
+    setPagination(data);
   };
 
   const handleSubmit = async (e) => {
@@ -106,7 +110,31 @@ function Categories() {
           ))}
         </tbody>
       </table>
-      
+      <div className="d-flex justify-content-center mt-3">
+
+        <button
+          className="btn btn-outline-primary me-2"
+          disabled={pagination.current_page === 1}
+          onClick={() => setCurrentPage(pagination.current_page - 1)}
+        >
+          Anterior
+        </button>
+
+        <span className="align-self-center">
+          Página {pagination.current_page} de {pagination.last_page}
+        </span>
+
+        <button
+          className="btn btn-outline-primary ms-2"
+          disabled={pagination.current_page === pagination.last_page}
+          onClick={() => setCurrentPage(pagination.current_page + 1)}
+        >
+          Siguiente
+        </button>
+
+      </div>
+
+
       {viewCategory && (
         <div className="modal fade show d-block" tabIndex="-1">
           <div className="modal-dialog">

@@ -1,13 +1,8 @@
 import { apiFetch } from "./api";
 
-export const getAllCategories = async () => {
-
-  const response = await apiFetch("categories");
-
-  if (!response.ok) {
-    throw new Error("Error fetching categories");
-  }
-
+export const getAllCategories = async (page = 1) => {
+  const response = await apiFetch(`categories?page=${page}`);
+  if (!response.ok) {throw new Error("Error fetching categories");}
   return await response.json();
 };
 
