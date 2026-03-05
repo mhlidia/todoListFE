@@ -1,7 +1,7 @@
 import { apiFetch } from "./api";
 
-export const getAllTasks = async () => {
-  const response = await apiFetch("tasks");
+export const getAllTasks = async (page = 1) => {
+  const response = await apiFetch(`tasks?page=${page}`);
   if (!response.ok) throw new Error("Error fetching tasks");
   return await response.json();
 };

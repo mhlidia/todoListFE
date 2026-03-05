@@ -1,7 +1,7 @@
 import { apiFetch } from "./api";
 
-export const getAllTags = async () => {
-  const response = await apiFetch("tags");
+export const getAllTags = async (page = 1) => {
+  const response = await apiFetch(`tags?page=${page}`);
   if (!response.ok) throw new Error("Error fetching tags");
   return await response.json();
 };

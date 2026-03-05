@@ -15,19 +15,30 @@ function Tasks() {
   const [editingTaskId, setEditingTaskId] = useState(null);
   const [selectedTask, setSelectedTask] = useState(null);
   const [taskToDelete, setTaskToDelete] = useState(null);
+  
+  const [pagination, setPagination] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
-    loadData();
-  }, []);
+    loadTasks(currentPage);
+    loadCategories();
+    loadTags();
+  }, [currentPage]);
 
-  const loadData = async () => {
-    const taskData = await taskService.getAllTasks();
-    const categoryData = await categoryService.getAllCategories();
-    const tagData = await tagService.getAllTags();
+  const loadTasks = async (page) => {
+    const data = await taskService.getAllTasks(page);
+    setTasks(data.data);
+    setPagination(data);
+  };
 
-    setTasks(taskData);
-    setCategories(categoryData);
-    setTags(tagData);
+  const loadCategories = async () => {
+    const data = await categoryService.getAllCategories();
+    setCategories(data.data);
+  };
+
+  const loadTags = async () => {
+    const data = await tagService.getAllTags();
+    setTags(data.data);
   };
 
   const handleTagChange = (e) => {
@@ -231,6 +242,30 @@ function Tasks() {
             ))}
         </tbody>
       </table>
+
+      <div className="d-flex justify-content-center mt-3">
+
+        <button
+          className="btn btn-outline-primary me-2"
+          disabled={pagination.current_page === 1}
+          onClick={() => setCurrentPage(pagination.current_page - 1)}
+        >
+          Anterior
+        </button>
+
+        <span className="align-self-center">
+          Página {pagination.current_page} de {pagination.last_page}
+        </span>
+
+        <button
+          className="btn btn-outline-primary ms-2"
+          disabled={pagination.current_page === pagination.last_page}
+          onClick={() => setCurrentPage(pagination.current_page + 1)}
+        >
+          Siguiente
+        </button>
+
+      </div>
 
       {selectedTask && (
         <div className="modal show d-block" tabIndex="-1">

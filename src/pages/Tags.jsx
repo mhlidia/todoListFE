@@ -9,13 +9,17 @@ function Tags() {
   const [deleteId, setDeleteId] = useState(null);
   const [viewTag, setViewTag] = useState(null);
 
-  useEffect(() => {
-    loadTags();
-  }, []);
+  const [pagination, setPagination] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const loadTags = async () => {
-    const data = await tagService.getAllTags();
-    setTags(data);
+  useEffect(() => {
+    loadTags(currentPage);
+  }, [currentPage]);
+
+  const loadTags = async (page) => {
+    const data = await tagService.getAllTags(page);
+    setTags(data.data);
+    setPagination(data);
   };
 
   const handleSubmit = async (e) => {
@@ -138,6 +142,31 @@ function Tags() {
           ))}
         </tbody>
       </table>
+
+      <div className="d-flex justify-content-center mt-3">
+
+        <button
+          className="btn btn-outline-primary me-2"
+          disabled={pagination.current_page === 1}
+          onClick={() => setCurrentPage(pagination.current_page - 1)}
+        >
+          Anterior
+        </button>
+
+        <span className="align-self-center">
+          Página {pagination.current_page} de {pagination.last_page}
+        </span>
+
+        <button
+          className="btn btn-outline-primary ms-2"
+          disabled={pagination.current_page === pagination.last_page}
+          onClick={() => setCurrentPage(pagination.current_page + 1)}
+        >
+          Siguiente
+        </button>
+
+      </div>
+
 
       {viewTag && (
         <div className="modal fade show d-block">
